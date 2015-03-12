@@ -5,15 +5,18 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/followBot.cpp \
-../src/main.cpp 
+../src/main.cpp \
+../src/utils.cpp 
 
 OBJS += \
 ./src/followBot.o \
-./src/main.o 
+./src/main.o \
+./src/utils.o 
 
 CPP_DEPS += \
 ./src/followBot.d \
-./src/main.d 
+./src/main.d \
+./src/utils.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

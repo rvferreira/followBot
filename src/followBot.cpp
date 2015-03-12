@@ -7,10 +7,16 @@
 
 #include "followBot.h"
 
+using namespace std;
+
 int acquireTarget(PlayerCc::RangerProxy *rp){
 	return 0;
 }
 
-void stalkBot(PlayerCc::RangerProxy *rp, behavior *bh){
-	bh->speed = 0.1;
+void stalkBot(PlayerCc::RangerProxy *rp, double *spd, double *tr){
+
+}
+
+void avoidObstacles(PlayerCc::RangerProxy  *rp, double *spd, double *tr){
+
 }

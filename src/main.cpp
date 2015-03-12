@@ -7,50 +7,49 @@
 //============================================================================
 
 #include <iostream>
+#include <time.h>
 #include "followBot.h"
 
 using namespace std;
 
 int main(int argc, char *argv[]) {
 	try
+	{
+		/*Setting up robot and sensors*/
+
+		/* Stalker Robot */
+		PlayerCc::PlayerClient target("localhost", 6666);
+		PlayerCc::RangerProxy rp(&target, 1);
+		PlayerCc::Position2dProxy pp(&target, 0);
+
+		/*motor habilitation*/
+		pp.SetMotorEnable (true);
+
+		double speed = 0;
+		double turnrate = 0;
+
+		list<botState> measurements;
+
+		for(;;)
 		{
-			/*Setting up robot and sensors*/
+			target.Read();
 
-			/* Stalker Robot */
-			PlayerCc::PlayerClient target("localhost", 6666);
-			PlayerCc::RangerProxy rp(&target, 1);
-			PlayerCc::Position2dProxy pp(&target, 0);
-
-			/*motor habilitation*/
-			pp.SetMotorEnable (true);
-			behav.speed = 0;
-			behav.turnrate = 0;
-
-			for(;;)
-			{
-				/*Reading sensors and acquiring targets*/
-				while (!acquireTarget(&rp)){
-					target.Read();
-				}
-
-				/*Setting behavior acording to read data*/
-				stalkBot(&rp, &behav);
-
-				/*print out the new speeds*/
-//				std::cout 	<< "Speed: " 		<< behav.speed << "  "
-//							<< "Turn speed: " 	<< behav.turnrate
-//							<< std::endl;
-
-				/*robot speed setting up*/
-				pp.SetSpeed(behav.speed, behav.turnrate);
+			if (!acquireTarget(&rp)){
+				readSensors(&rp, measurements);
 			}
+			else {
+				stalkBot(&rp, &speed, &turnrate);
+				avoidObstacles(&rp, &speed, &turnrate);
+			}
+			pp.SetSpeed(speed, turnrate);
+			sleep(1);
+		}
 
-		}
-		catch (PlayerCc::PlayerError & e)
-		{
-			/*Exception treatment*/
-			std::cerr << e << std::endl;
-			return -1;
-		}
-		return 0;
+	}
+	catch (PlayerCc::PlayerError & e)
+	{
+		std::cerr << e << std::endl;
+		return -1;
+	}
+	return 0;
 }
