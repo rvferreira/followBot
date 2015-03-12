@@ -9,12 +9,15 @@
 
 using namespace std;
 
-int acquireTarget(PlayerCc::RangerProxy *rp){
-	return 0;
+Destination* targetBot;
+
+int acquireTarget(PlayerCc::RangerProxy *rp, list<botState>& measurements){
+	targetBot = new Destination(rp);
+	return 1;
 }
 
-void stalkBot(PlayerCc::RangerProxy *rp, double *spd, double *tr){
-
+void stalkBot(double *spd, double *tr){
+	cout << targetBot;
 }
 
 void avoidObstacles(PlayerCc::RangerProxy  *rp, double *spd, double *tr){

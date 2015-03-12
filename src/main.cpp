@@ -22,7 +22,6 @@ int main(int argc, char *argv[]) {
 		PlayerCc::RangerProxy rp(&target, 1);
 		PlayerCc::Position2dProxy pp(&target, 0);
 
-		/*motor habilitation*/
 		pp.SetMotorEnable (true);
 
 		double speed = 0;
@@ -34,11 +33,14 @@ int main(int argc, char *argv[]) {
 		{
 			target.Read();
 
-			if (!acquireTarget(&rp)){
+			if (!acquireTarget(&rp, measurements)){
+				speed = 0;
+				turnrate = 0;
 				readSensors(&rp, measurements);
 			}
 			else {
-				stalkBot(&rp, &speed, &turnrate);
+				measurements.empty();
+				stalkBot(&speed, &turnrate);
 				avoidObstacles(&rp, &speed, &turnrate);
 			}
 			pp.SetSpeed(speed, turnrate);

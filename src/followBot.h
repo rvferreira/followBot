@@ -10,12 +10,8 @@
 
 #include "utils.h"
 
-struct reading {
-	double intensity[180];
-};
-
-int acquireTarget(PlayerCc::RangerProxy *rp);
-void stalkBot(PlayerCc::RangerProxy *rp, double *spd, double *tr);
+int acquireTarget(PlayerCc::RangerProxy *rp, list<botState>& measurements);
+void stalkBot(double *spd, double *tr);
 void avoidObstacles(PlayerCc::RangerProxy  *rp, double *spd, double *tr);
 
 #endif /* FOLLOWBOT_H_ */
