@@ -17,6 +17,7 @@ int acquireTarget(PlayerCc::RangerProxy *rp, list<botState>& measurements){
 }
 
 void stalkBot(double *spd, double *tr){
+	*tr = getTurnRate(targetBot->angle);
 	cout << targetBot;
 }
 
