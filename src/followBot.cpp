@@ -17,11 +17,14 @@ int acquireTarget(PlayerCc::RangerProxy *rp, list<botState>& measurements){
 }
 
 void stalkBot(double *spd, double *tr){
-	//*tr = getTurnRate(targetBot->angle);
-	//*spd = SPEED_SEED_VALUE;
-	cout << targetBot;
+	*tr = getTurnRate(targetBot->angle);
+	*spd = SPEED_SEED_VALUE;
 }
 
 void avoidObstacles(PlayerCc::RangerProxy  *rp, double *spd, double *tr){
-	//*spd = *spd / 5;
+	Coordinate* front_obstacle;
+	front_obstacle = Coordinate::closestCoordinate(rp, -(MAX_ANGLE_FOR_FRONT_COLLISION), MAX_ANGLE_FOR_FRONT_COLLISION);
+
+	if (front_obstacle->distance < 2) *spd = *spd * pow((front_obstacle->distance / 2), 2);
+	cout << *spd << " " << front_obstacle->distance << endl;
 }

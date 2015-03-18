@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 				avoidObstacles(&rp, &speed, &turnrate);
 			}
 			pp.SetSpeed(speed, turnrate);
-			sleep(1);
+			//sleep(1);
 		}
 
 	}
