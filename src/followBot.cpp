@@ -9,10 +9,11 @@
 
 using namespace std;
 
-Destination* targetBot;
+Coordinate* targetBot;
 
 int acquireTarget(PlayerCc::RangerProxy *rp, list<botState>& measurements){
-	targetBot = new Destination(rp);
+	targetBot = Coordinate::closestCoordinate(rp, -90, 90);
+	cout << targetBot;
 	return 1;
 }
 
@@ -23,5 +24,5 @@ void stalkBot(double *spd, double *tr){
 }
 
 void avoidObstacles(PlayerCc::RangerProxy  *rp, double *spd, double *tr){
-
+	//*spd = *spd / 5;
 }
