@@ -47,8 +47,8 @@ public:
 
 double avrg(double *array, int init, int end);
 double getTurnRate(int angle);
-double getMinorDistanceFromRange(PlayerCc::RangerProxy *rp, int initialAngle, int finalAngle);
 int angleToSensor(int angle);
+int sensorToAngle(int sensor);
 void readSensors(PlayerCc::RangerProxy *rp, list<botState>&);
 
 

@@ -13,13 +13,12 @@ Coordinate* targetBot;
 
 int acquireTarget(PlayerCc::RangerProxy *rp, list<botState>& measurements){
 	targetBot = Coordinate::closestCoordinate(rp, -90, 90);
-	cout << targetBot;
 	return 1;
 }
 
 void stalkBot(double *spd, double *tr){
-	*tr = getTurnRate(targetBot->angle);
-	*spd = SPEED_SEED_VALUE;
+	//*tr = getTurnRate(targetBot->angle);
+	//*spd = SPEED_SEED_VALUE;
 	cout << targetBot;
 }
 

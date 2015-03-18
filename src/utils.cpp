@@ -26,23 +26,27 @@ Coordinate::Coordinate(int angle, double distance){
 }
 
 Coordinate* Coordinate::closestCoordinate(PlayerCc::RangerProxy *rp, int initialAngle, int finalAngle){
-	Coordinate* toReturn = 0;
+	Coordinate* toReturn;
+
 	double min_distance = 8;
-	int related_sensor;
-	for (int i = angleToSensor(initialAngle); i < angleToSensor(finalAngle); i++){
-		if (rp->GetRange(i) < min_distance){
-			min_distance = rp->GetRange(i);
-			related_sensor = i;
+	int related_angle;
+	for (int i = initialAngle; i < finalAngle; i++){
+		if (i>-90 && i<90 && rp->GetRange(angleToSensor(i)) < min_distance){
+			min_distance = rp->GetRange(angleToSensor(i));
+			related_angle = i;
 		}
 	}
-
-	*toReturn = Coordinate((90 - related_sensor), min_distance);
+	toReturn = new Coordinate(related_angle, min_distance);
 
 	return toReturn;
 }
 
+int sensorToAngle(int sensor){
+	return -(sensor - 90);
+}
+
 int angleToSensor(int angle){
-	return -(angle + 90);
+	return -(angle - 90);
 }
 
 botState::botState(PlayerCc::RangerProxy *rp){
