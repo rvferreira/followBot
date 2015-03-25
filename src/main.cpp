@@ -37,14 +37,16 @@ int main(int argc, char *argv[]) {
 				speed = 0;
 				turnrate = 0;
 				readSensors(&rp, measurements);
+				pp.SetSpeed(speed, turnrate);
 			}
 			else {
-				measurements.empty();
-				stalkBot(&speed, &turnrate);
+				measurements.clear();
+//				stalkBot(&speed, &turnrate);
 				avoidObstacles(&rp, &speed, &turnrate);
+				pp.SetSpeed(speed, turnrate);
+				sleep(1);
+				//TODO destroy targetBot instance
 			}
-			pp.SetSpeed(speed, turnrate);
-			//sleep(1);
 		}
 
 	}

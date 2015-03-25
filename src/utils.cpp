@@ -58,10 +58,16 @@ botState::botState(PlayerCc::RangerProxy *rp){
 }
 
 int botState::operator==(const botState &rhs) const{
+	double maxVariation = 0;
+	int relatedSensor = -1;
 	for (int i = 0; i < SENSORS_COUNT; i++){
-		if (fabs(this->sensorData[i] - rhs.sensorData[i]) > NOISE_THRESHOLD) return 0;
+		if (fabs(this->sensorData[i] - rhs.sensorData[i]) > maxVariation) {
+			maxVariation = fabs(this->sensorData[i] - rhs.sensorData[i]);
+			relatedSensor = i;
+		}
 	}
-	return 1;
+	if (maxVariation > NOISE_THRESHOLD) return relatedSensor;
+	return 0;
 }
 
 int botState::operator<(const botState &rhs) const{

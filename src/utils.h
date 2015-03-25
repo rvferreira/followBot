@@ -43,6 +43,8 @@ public:
 		output << "angle: " << coord->angle << " distance: " << coord->distance << endl;
 		return output;
 	}
+
+	~Coordinate();
 };
 
 double avrg(double *array, int init, int end);

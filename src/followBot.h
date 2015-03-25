@@ -13,6 +13,7 @@
 #define STOP_COLLISION_DISTANCE 0.4
 #define MAX_ANGLE_FOR_FRONT_COLLISION 30
 
+int findTarget(list<botState>& measurements);
 int acquireTarget(PlayerCc::RangerProxy *rp, list<botState>& measurements);
 void stalkBot(double *spd, double *tr);
 void avoidObstacles(PlayerCc::RangerProxy  *rp, double *spd, double *tr);
