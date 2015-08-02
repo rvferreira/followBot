@@ -9,73 +9,49 @@
 
 using namespace std;
 
-Coordinate* targetBot;
+double targX, targY, targYaw;
 
-int findTarget(list<botState>& measurements) {
-	int sensor = -1;
-	double maxDistance = 0;
+double lastMeasurements[N_MEAS_BUFFERS][N_SENSORS];
+double lastMeasDifferences[N_MEAS_BUFFERS - 1][N_SENSORS];
 
-	double **sensorData = (double**) calloc(measurements.size(), sizeof(double*));
-	for (unsigned int i = 0; i < measurements.size(); i++) sensorData[i] = (double*) calloc(SENSORS_COUNT, sizeof(double));
+void initVariables(){
+    int i, j;
 
-	list<botState>::iterator it = measurements.begin();
-	for (unsigned int i = 0; i < measurements.size(); i++){
-		for (int j=0; j<SENSORS_COUNT; j++){
-			sensorData[i][j] = it->sensorData[j];
-			if (i>0){
-				if (maxDistance < (sensorData[i][j] - sensorData[i-1][j])){
-					maxDistance = (sensorData[i][j] - sensorData[i-1][j]);
-//					cout << maxDistance << " ";
-					if (maxDistance > NOISE_THRESHOLD) {
-						sensor = i;
-//						cout << "sensor: " << sensor << " , ";
-					}
-				}
-			}
-		}
-		advance(it, 1);
-	}
-	cout << endl;
+    targX = 0;
+    targY = 0;
 
-	for (unsigned int i = 0; i<measurements.size(); i++) free(sensorData[i]);
-	free(sensorData);
-
-	if (measurements.size() > 2){
-		targetBot = new Coordinate(sensorToAngle(sensor), maxDistance);
-		cout << targetBot->angle;
-		return 1;
-	}
-
-	return 0;
+    for (i = 0; i < N_MEAS_BUFFERS; i++){
+        for (j = 0; j < N_SENSORS; j++){
+            lastMeasurements[i][j] = 0;
+        }
+    }
 }
 
-int acquireTarget(PlayerCc::RangerProxy *rp, list<botState>& measurements) {
-	if (measurements.size()<=1) {
-//		cout << "mto poucos elementos" << endl;
-		return 0;
-	}
-	else if (targetBot == NULL) {
-//		cout << "sem target, mas com " << measurements.size() << " medidas." << endl;
-		return (findTarget(measurements));
-	}
-
-	return 1;
+void rotateLMQueue(){
+    int i, j;
+    for (j = 0; j < N_SENSORS; j++){
+        for (i = N_MEAS_BUFFERS - 1; i > 0; i--){
+            lastMeasurements[i][j] = lastMeasurements[i - 1][j];
+        }
+    }
 }
 
-void stalkBot(double *spd, double *tr) {
-	*tr = getTurnRate(targetBot->angle);
-	*spd = SPEED_SEED_VALUE;
-}
+bool acquireTarget(PlayerCc::RangerProxy *rp){
+    /* update measurements array */
+    cout << lastMeasurements[0][0] << "\n" << lastMeasurements[1][0] << "\n" <<  lastMeasurements[2][0] << "\n\n";
 
-void avoidObstacles(PlayerCc::RangerProxy *rp, double *spd, double *tr) {
-	Coordinate* front_obstacle;
-	front_obstacle = Coordinate::closestCoordinate(rp,
-			-(MAX_ANGLE_FOR_FRONT_COLLISION), MAX_ANGLE_FOR_FRONT_COLLISION);
+    int i, j;
+    rotateLMQueue();
+    for (i = 0; i < N_SENSORS; i++){
+        lastMeasurements[0][i] = (*rp)[90];
+    }
 
-	double distance = front_obstacle->distance - STOP_COLLISION_DISTANCE;
+    /* looking for movement */
+    for (i = 0; i < N_MEAS_BUFFERS - 1; i++){
+        for (j = 0; j < N_SENSORS; j++){
+            lastMeasDifferences[i][j] = lastMeasurements[i][j] - lastMeasurements[i + 1][j];
+        }
+    }
 
-	if (distance < 2)
-		*spd = *spd * ((distance > 0) - (0 > distance))
-				* pow((distance / 2), 2);
-//	cout << *spd << " " << front_obstacle->distance << endl;
+    return 1;
 }

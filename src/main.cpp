@@ -7,53 +7,54 @@
 //============================================================================
 
 #include <iostream>
+#include <iomanip>
+
 #include <time.h>
 #include "followBot.h"
 
 using namespace std;
 
 int main(int argc, char *argv[]) {
-	try
-	{
-		/*Setting up robot and sensors*/
+    try {
+        /*Setting up robot and sensors*/
+        initVariables();
 
-		/* Stalker Robot */
-		PlayerCc::PlayerClient target("localhost", 6666);
-		PlayerCc::RangerProxy rp(&target, 1);
-		PlayerCc::Position2dProxy pp(&target, 0);
+        /* Stalker Robot */
+        PlayerCc::PlayerClient stalker("localhost", 6666);
+        PlayerCc::RangerProxy rp(&stalker, 1);
+        PlayerCc::Position2dProxy pp(&stalker, 0);
 
-		pp.SetMotorEnable (true);
+        pp.SetMotorEnable(true);
 
-		double speed = 0;
-		double turnrate = 0;
+        double speed = 0;
+        double turnrate = 0;
+        int stalkerState = LOOKING_FOR_TARGET;
 
-		list<botState> measurements;
+        for (; ;) {
+            stalker.Read();
 
-		for(;;)
-		{
-			target.Read();
+            /* state 0 - looking for target */
+            if (stalkerState == LOOKING_FOR_TARGET){
+                if (acquireTarget(&rp)) {
+                    if (debugMode) cout << "no target\n\n";
+                }
+                else {
+                    if (debugMode) cout << "target acquired at X: " << targX << " Y: " << targY << "\n\n";
+                    stalkerState = MOVING_TO_TARGET;
+                }
+            }
 
-			if (!acquireTarget(&rp, measurements)){
-				speed = 0;
-				turnrate = 0;
-				readSensors(&rp, measurements);
-				pp.SetSpeed(speed, turnrate);
-			}
-			else {
-				measurements.clear();
-//				stalkBot(&speed, &turnrate);
-				avoidObstacles(&rp, &speed, &turnrate);
-				pp.SetSpeed(speed, turnrate);
-				sleep(1);
-				//TODO destroy targetBot instance
-			}
-		}
+            /* state 1 - setting speed */
 
-	}
-	catch (PlayerCc::PlayerError & e)
-	{
-		std::cerr << e << std::endl;
-		return -1;
-	}
-	return 0;
+            /* final action */
+            pp.SetSpeed(speed, turnrate);
+            sleep(1);
+
+        }
+    }
+
+    catch (PlayerCc::PlayerError &e) {
+        std::cerr << e << std::endl;
+        return -1;
+    }
 }

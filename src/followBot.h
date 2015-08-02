@@ -10,12 +10,12 @@
 
 #include "utils.h"
 
-#define STOP_COLLISION_DISTANCE 0.4
-#define MAX_ANGLE_FOR_FRONT_COLLISION 30
+#define N_SENSORS 180
+#define N_MEAS_BUFFERS 3
 
-int findTarget(list<botState>& measurements);
-int acquireTarget(PlayerCc::RangerProxy *rp, list<botState>& measurements);
-void stalkBot(double *spd, double *tr);
-void avoidObstacles(PlayerCc::RangerProxy  *rp, double *spd, double *tr);
+extern double targX, targY;
+
+void initVariables();
+bool acquireTarget(PlayerCc::RangerProxy *rp);
 
 #endif /* FOLLOWBOT_H_ */
