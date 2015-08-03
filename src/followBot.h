@@ -9,9 +9,11 @@
 #define FOLLOWBOT_H_
 
 #include "utils.h"
+#include <stdlib.h>
 
 #define N_SENSORS 180
 #define N_MEAS_BUFFERS 3
+#define N_ACTIVATIONS_TO_LOCK 3
 
 extern double targX, targY;
 
