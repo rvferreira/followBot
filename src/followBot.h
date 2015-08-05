@@ -9,7 +9,7 @@
 #define FOLLOWBOT_H_
 
 #include "utils.h"
-#include <stdlib.h>
+#include <iomanip>
 
 #define N_SENSORS 180
 #define N_MEAS_BUFFERS 3

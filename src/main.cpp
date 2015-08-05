@@ -25,12 +25,10 @@ int main(int argc, char *argv[]) {
         PlayerCc::Position2dProxy pp(&stalker, 0);
 
         pp.SetMotorEnable(true);
-
-        double speed = 0;
-        double turnrate = 0;
         int stalkerState = LOOKING_FOR_TARGET;
 
         for (; ;) {
+            pp.SetSpeed(0,0);
             stalker.Read();
 
             /* state 0 - looking for target */
@@ -45,9 +43,17 @@ int main(int argc, char *argv[]) {
             }
 
             /* state 1 - setting speed */
+            if (stalkerState == MOVING_TO_TARGET){
+                player_pose2d_t pos = {pp.GetXPos() + targX, pp.GetYPos() + targY, 0};
+                player_pose2d_t spd = {10.0, 0, 10.0};
+                pp.GoTo(pos);
+
+                sleep(2);
+                pp.SetSpeed(0,0);
+                stalkerState = LOOKING_FOR_TARGET;
+            }
 
             /* final action */
-            pp.SetSpeed(speed, turnrate);
             sleep(1);
 
         }
