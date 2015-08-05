@@ -45,14 +45,19 @@ int main(int argc, char *argv[]) {
             /* state 1 - setting speed */
             if (stalkerState == MOVING_TO_TARGET) {
                 player_pose2d_t actualPosition = {pp.GetXPos(), pp.GetYPos(), pp.GetYaw()};
+
+                /* initial speed */
+                player_pose2d_t initialSpeed = {5.0, 0.0, 5.0};
+
+                /* actually moving */
                 pp.GoTo(targetPosition(actualPosition, targDis, targYaw));
+                sleep(1);
 
                 /* reset calculations */
-//                initVariables();
+                initVariables();
             }
 
             /* reset state */
-            sleep(1);
             pp.SetSpeed(0, 0);
             stalkerState = LOOKING_FOR_TARGET;
         }
