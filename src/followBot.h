@@ -14,12 +14,17 @@
 
 #define N_SENSORS 180
 #define N_MEAS_BUFFERS 3
-#define N_ACTIVATIONS_TO_LOCK 3
+#define N_ACTIVATIONS_TO_LOCK 2
+
+#define FORWARD_MAX_SPEED 20.0
+#define TURN_MAX_SPEED 10.0
+#define SLEEP_MOVING_TIME 3
 
 extern double targDis;
 extern int targYaw;
 
 void initVariables();
 bool acquireTarget(PlayerCc::RangerProxy *rp);
+void moveToTarget(player_pose2d_t actualPosition, player_pose2d_t initialSpeed, PlayerCc::Position2dProxy *pp);
 
 #endif /* FOLLOWBOT_H_ */

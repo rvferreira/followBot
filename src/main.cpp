@@ -47,14 +47,10 @@ int main(int argc, char *argv[]) {
                 player_pose2d_t actualPosition = {pp.GetXPos(), pp.GetYPos(), pp.GetYaw()};
 
                 /* initial speed */
-                player_pose2d_t initialSpeed = {10.0, 0.0, 5.0};
+                player_pose2d_t initialSpeed = {FORWARD_MAX_SPEED, 0.0, TURN_MAX_SPEED};
 
                 /* actually moving */
-                pp.GoTo(targetPosition(actualPosition, targDis, targYaw), initialSpeed);
-                sleep(1);
-
-                /* reset calculations */
-                initVariables();
+                moveToTarget(actualPosition, initialSpeed, &pp);
             }
 
             /* reset state */

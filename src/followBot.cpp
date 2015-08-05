@@ -100,3 +100,11 @@ bool acquireTarget(PlayerCc::RangerProxy * rp) {
 
     return 0;
 }
+
+void moveToTarget(player_pose2d_t actualPosition, player_pose2d_t initialSpeed, PlayerCc::Position2dProxy *pp){
+    (*pp).GoTo(targetPosition(actualPosition, targDis, targYaw), initialSpeed);
+    sleep(SLEEP_MOVING_TIME);
+
+    /* reset calculations */
+    initVariables();
+}
