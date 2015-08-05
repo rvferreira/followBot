@@ -1,9 +1,9 @@
 //============================================================================
 // Name        : playerRobotControl.cpp
 // Author      : Raphael Ferreira
-// Version     :
-// Copyright   : Don't fuck me without kissing me!
-// Description : Hello World in C++, Ansi-style
+// Version     : 2.0
+// Copyright   : Use a vontz, mas mantenha a autoria =)
+// Description : FollowBot using PlayerCC API and Stage for the simulation
 //============================================================================
 
 #include <iostream>
