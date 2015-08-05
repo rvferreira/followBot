@@ -103,7 +103,18 @@ bool acquireTarget(PlayerCc::RangerProxy * rp) {
 
 void moveToTarget(player_pose2d_t actualPosition, player_pose2d_t initialSpeed, PlayerCc::Position2dProxy *pp){
     (*pp).GoTo(targetPosition(actualPosition, targDis, targYaw), initialSpeed);
-    sleep(SLEEP_MOVING_TIME);
+
+    //sleeping time as a function of the target distance
+    double fittingCurve = log(targDis + 0.34) / log(1.5) + 2.8;
+    double dynamicSleepMovingTime = SLEEP_MOVING_TIME * fittingCurve;
+
+    //more sleeping time in case of target getting out of range
+    dynamicSleepMovingTime += (int) (std::abs(targYaw) / 45.0);
+
+    //slowdown if target is too close
+    if (targDis < MIN_SAFETY_DISTANCE) (*pp).SetSpeed(0.0, (*pp).GetYawSpeed());
+
+    sleep(dynamicSleepMovingTime);
 
     /* reset calculations */
     initVariables();
