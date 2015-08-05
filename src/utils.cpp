@@ -9,12 +9,13 @@
 
 int debugMode = 0;
 
-double relativeX(int sensor, double meas){
-    return ((8.0 - meas) * cos(sensor * PI / 180.0));
-}
+player_pose2d_t targetPosition(player_pose2d_t stalkerPosition, double targDis, int targYawDegree){
+    int targYaw = ((int) (stalkerPosition.pa * 180.0 / PI)) + targYawDegree;
+    double targX = stalkerPosition.px + targDis * cos(targYaw * PI / 180.0);
+    double targY = stalkerPosition.py + targDis * sin(targYaw * PI / 180.0);
 
-double relativeY(int sensor, double meas){
-    return ((8.0 - meas) * sin(sensor * PI / 180.0));
+    player_pose2d_t tp = {targX, targY, (double) targYaw};
+    return tp;
 }
 
 double relativeYaw(double yDiff, double xDiff){

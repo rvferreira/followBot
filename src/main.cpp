@@ -37,25 +37,24 @@ int main(int argc, char *argv[]) {
                     if (debugMode) cout << "no target\n\n";
                 }
                 else {
-                    if (debugMode) cout << "target acquired at X: " << targX << " Y: " << targY << "\n\n";
+                    if (debugMode) cout << "target acquired at Dis: " << targDis << " Yaw: " << targYaw << "\n\n";
                     stalkerState = MOVING_TO_TARGET;
                 }
             }
 
             /* state 1 - setting speed */
-            if (stalkerState == MOVING_TO_TARGET){
-                player_pose2d_t pos = {pp.GetXPos() + targX, pp.GetYPos() + targY, 0};
-                player_pose2d_t spd = {10.0, 0, 10.0};
-                pp.GoTo(pos);
+            if (stalkerState == MOVING_TO_TARGET) {
+                player_pose2d_t actualPosition = {pp.GetXPos(), pp.GetYPos(), pp.GetYaw()};
+                pp.GoTo(targetPosition(actualPosition, targDis, targYaw));
 
-                sleep(2);
-                pp.SetSpeed(0,0);
-                stalkerState = LOOKING_FOR_TARGET;
+                /* reset calculations */
+//                initVariables();
             }
 
-            /* final action */
+            /* reset state */
             sleep(1);
-
+            pp.SetSpeed(0, 0);
+            stalkerState = LOOKING_FOR_TARGET;
         }
     }
 

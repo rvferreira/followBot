@@ -9,7 +9,8 @@
 
 using namespace std;
 
-double targX, targY, targYaw;
+double targDis;
+int targYaw;
 
 double lastMeasurements[N_MEAS_BUFFERS][N_SENSORS];
 double lastMeasDifferences[N_MEAS_BUFFERS - 1][N_SENSORS];
@@ -20,8 +21,8 @@ double activatedSensorsMeasures[N_ACTIVATIONS_TO_LOCK];
 void initVariables() {
     int i, j;
 
-    targX = 0;
-    targY = 0;
+    targDis = -1;
+    targYaw = 0;
 
     for (i = 0; i < N_MEAS_BUFFERS; i++) {
         for (j = 0; j < N_SENSORS; j++) {
@@ -76,12 +77,14 @@ bool acquireTarget(PlayerCc::RangerProxy * rp) {
             associatedSensor = j;
         }
     }
+
     rotateASQueue();
     activatedSensors[0] = associatedSensor;
+
     activatedSensorsMeasures[0] = lastMeasurements[i][associatedSensor] < lastMeasurements[i + 1][associatedSensor] ?
                                   lastMeasurements[i][associatedSensor] : lastMeasurements[i + 1][associatedSensor];
 
-    if (1){
+    if (debugMode){
         cout << activatedSensors[0] << "\t\t" << activatedSensors[1] << "\t\t" << activatedSensors[2] << "\n";
         cout << std::fixed << std::setw(1) << std::setprecision(4) << std::setfill( '0' ) << activatedSensorsMeasures[0] << "\t\t" << activatedSensorsMeasures[1] << "\t\t" << activatedSensorsMeasures[2] << "\n\n";
     }
@@ -92,5 +95,8 @@ bool acquireTarget(PlayerCc::RangerProxy * rp) {
         if (activatedSensors[i] == -1) return 1;
     }
 
-    return 1;
+    targDis = activatedSensorsMeasures[0];
+    targYaw = activatedSensors[0] - 90;
+
+    return 0;
 }

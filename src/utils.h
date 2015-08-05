@@ -21,9 +21,6 @@ enum robotStates {
 
 extern int debugMode;
 
-double relativeX(int sensor, double meas);
-double relativeY(int sensor, double meas);
-double relativeYaw(double yDiff, double xDiff);
-
+player_pose2d_t targetPosition(player_pose2d_t stalkerPosition, double targDis, int targYawDegree);
 
 #endif /* UTILS_H_ */
