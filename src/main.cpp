@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
         pp.SetMotorEnable(true);
         int stalkerState = LOOKING_FOR_TARGET;
 
-        for (; ;) {
+        for (;;) {
             pp.SetSpeed(0,0);
             stalker.Read();
 

@@ -3,6 +3,7 @@
 # $Id$
 
 include "pioneer.inc"
+include "slow_pioneer.inc"
 include "map.inc"
 include "sick.inc"
 
@@ -33,7 +34,7 @@ floorplan
   bitmap "bitmaps/cave.png"
 )
 
-pioneer2dx
+spioneer2dx
 (		  
   # can refer to the robot by this name
   name "target"
