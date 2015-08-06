@@ -20,7 +20,7 @@
 #define TURN_MAX_SPEED 10.0
 #define SLEEP_MOVING_TIME 0.5
 
-#define MIN_SAFETY_DISTANCE 0.3
+#define MIN_SAFETY_DISTANCE 0.6
 
 extern double targDis;
 extern int targYaw;

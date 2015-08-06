@@ -112,7 +112,11 @@ void moveToTarget(player_pose2d_t actualPosition, player_pose2d_t initialSpeed, 
     dynamicSleepMovingTime += (int) (std::abs(targYaw) / 45.0);
 
     //slowdown if target is too close
-    if (targDis < MIN_SAFETY_DISTANCE) (*pp).SetSpeed(0.0, (*pp).GetYawSpeed());
+    if (targDis < MIN_SAFETY_DISTANCE) {
+        (*pp).SetSpeed(-0.2, (targYaw / 45.0));
+        sleep(1);
+        dynamicSleepMovingTime = 0;
+    }
 
     sleep(dynamicSleepMovingTime);
 
